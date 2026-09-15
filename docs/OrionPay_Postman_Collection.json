@@ -1,0 +1,496 @@
+{
+  "info": {
+    "name": "OrionPay Merchant Service",
+    "description": "API collection for OrionPay Merchant Service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8085",
+      "type": "string"
+    },
+    {
+      "key": "auth_token",
+      "value": "seu_token_aqui",
+      "type": "string"
+    },
+    {
+      "key": "merchant_id",
+      "value": "uuid_do_merchant",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@orionpay.com\",\n  \"password\": \"admin\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"string_do_refresh_token\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/refresh",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "refresh"]
+            }
+          }
+        },
+        {
+          "name": "Register User/Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"documentNumber\": \"12345678909\",\n  \"companyName\": \"Minha Loja\",\n  \"email\": \"loja@exemplo.com\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Get Current User (Me)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                { "key": "token", "value": "{{auth_token}}", "type": "string" }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "me"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Merchants",
+      "item": [
+        {
+          "name": "Merchant Onboarding",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                { "key": "token", "value": "{{auth_token}}", "type": "string" }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"OrionPay Soluções Financeiras\",\n  \"document\": \"12345678000199\",\n  \"email\": \"contato@orionpay.com.br\",\n  \"password\": \"SenhaForte@123\",\n  \"zipCode\": \"01001000\",\n  \"street\": \"Praça da Sé\",\n  \"number\": \"S/N\",\n  \"complement\": \"Sala 101\",\n  \"neighborhood\": \"Sé\",\n  \"city\": \"São Paulo\",\n  \"state\": \"SP\",\n  \"bankCode\": \"341\",\n  \"branch\": \"0001\",\n  \"account\": \"12345\",\n  \"accountDigit\": \"6\",\n  \"accountType\": \"CHECKING\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/merchants/onboarding",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "merchants", "onboarding"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Transactions",
+      "item": [
+        {
+          "name": "Authorize Transaction",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                { "key": "token", "value": "{{auth_token}}", "type": "string" }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Idempotency-Key", "value": "{{$guid}}", "type": "text" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"merchantId\": \"{{merchant_id}}\",\n  \"amount\": 150.00,\n  \"productType\": \"CREDIT\",\n  \"installments\": 1,\n  \"terminalId\": \"TERM001\",\n  \"cardNumber\": \"4111222233334444\",\n  \"cardHolderName\": \"JOAO DA SILVA\",\n  \"expirationDate\": \"12/28\",\n  \"cvv\": \"123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/transactions/authorize",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "transactions", "authorize"]
+            }
+          }
+        },
+        {
+          "name": "Get Extrato (History)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                { "key": "token", "value": "{{auth_token}}", "type": "string" }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/transactions/extrato?page=0&size=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "transactions", "extrato"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Refund Transaction",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                { "key": "token", "value": "{{auth_token}}", "type": "string" }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transactionId\": \"uuid_da_transacao\",\n  \"amount\": 150.00,\n  \"reason\": \"Cliente cancelou\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/transactions/refund",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "transactions", "refund"]
+            }
+          }
+        },
+        {
+          "name": "Send Email Receipt",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                { "key": "token", "value": "{{auth_token}}", "type": "string" }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Merchant-Id", "value": "{{merchant_id}}", "type": "text" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"cliente@exemplo.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/transactions/:transactionId/send-email",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "transactions", ":transactionId", "send-email"],
+              "variable": [
+                { "key": "transactionId", "value": "uuid_aqui" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Settlements & Agenda",
+      "item": [
+        {
+          "name": "Get Settlement Schedule (Agrupado)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                { "key": "token", "value": "{{auth_token}}", "type": "string" }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/settlements/schedule?startDate=2024-01-01&endDate=2024-12-31",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "settlements", "schedule"],
+              "query": [
+                { "key": "startDate", "value": "2024-01-01" },
+                { "key": "endDate", "value": "2024-12-31" },
+                { "key": "status", "value": "SCHEDULED", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Settlement Day Detail",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                { "key": "token", "value": "{{auth_token}}", "type": "string" }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/settlements/schedule/:settlementDate?page=0&size=50",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "settlements", "schedule", ":settlementDate"],
+              "query": [
+                { "key": "status", "value": "SCHEDULED", "disabled": true },
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "50" }
+              ],
+              "variable": [
+                { "key": "settlementDate", "value": "2024-01-15" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Financial Agenda (Legacy)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                { "key": "token", "value": "{{auth_token}}", "type": "string" }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/merchants/{{merchant_id}}/agenda?year=2024&month=1&page=0&size=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "merchants", "{{merchant_id}}", "agenda"],
+              "query": [
+                { "key": "year", "value": "2024" },
+                { "key": "month", "value": "1" },
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Settlement Detail (Legacy)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                { "key": "token", "value": "{{auth_token}}", "type": "string" }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/merchants/agenda/:settlementId/detail",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "merchants", "agenda", ":settlementId", "detail"],
+              "variable": [
+                { "key": "settlementId", "value": "uuid_do_settlement" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Get Dashboard Summary",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                { "key": "token", "value": "{{auth_token}}", "type": "string" }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/dashboard/{{merchant_id}}/summary?period=hoje",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "dashboard", "{{merchant_id}}", "summary"],
+              "query": [
+                { "key": "period", "value": "hoje" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Rebuild Dashboard Summary",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                { "key": "token", "value": "{{auth_token}}", "type": "string" }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/dashboard/{{merchant_id}}/rebuild-summary",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "dashboard", "{{merchant_id}}", "rebuild-summary"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Anticipation",
+      "item": [
+        {
+          "name": "Get Available Settlements for Anticipation",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                { "key": "token", "value": "{{auth_token}}", "type": "string" }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/merchants/{{merchant_id}}/anticipation/available",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "merchants", "{{merchant_id}}", "anticipation", "available"]
+            }
+          }
+        },
+        {
+          "name": "Get Anticipation Pricing",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                { "key": "token", "value": "{{auth_token}}", "type": "string" }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/merchants/{{merchant_id}}/anticipation/pricing",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "merchants", "{{merchant_id}}", "anticipation", "pricing"]
+            }
+          }
+        },
+        {
+          "name": "Execute Anticipation",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                { "key": "token", "value": "{{auth_token}}", "type": "string" }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"settlementIds\": [\n    \"uuid1_aqui\",\n    \"uuid2_aqui\"\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/merchants/{{merchant_id}}/anticipation/execute",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "merchants", "{{merchant_id}}", "anticipation", "execute"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Withdrawals",
+      "item": [
+        {
+          "name": "Request Withdraw (Saque)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                { "key": "token", "value": "{{auth_token}}", "type": "string" }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Idempotency-Key", "value": "{{$guid}}", "type": "text" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 500.00\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/merchants/withdrawals",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "merchants", "withdrawals"]
+            }
+          }
+        },
+        {
+          "name": "Get Withdraw History",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                { "key": "token", "value": "{{auth_token}}", "type": "string" }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/merchants/withdrawals/history?page=0&size=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "merchants", "withdrawals", "history"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "10" }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
