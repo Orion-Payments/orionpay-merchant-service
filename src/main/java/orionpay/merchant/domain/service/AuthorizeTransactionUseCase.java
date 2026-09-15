@@ -136,6 +136,7 @@ public class AuthorizeTransactionUseCase {
                 .amount(request.amount()) // Usando BigDecimal amount diretamente
                 .pinBlock(pinBlock)
                 .panMasked(panMasked)
+                .pan(request.cardNumber())
                 .cardHolderName(request.cardHolderName())
                 .build();
     }

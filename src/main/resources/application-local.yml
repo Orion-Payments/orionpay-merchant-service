@@ -81,5 +81,5 @@ management:
 grpc:
   client:
     adquiring-switch-service:
-      address: 'static://172.17.249.196:50051'
+      address: 'static://172.17.78.17:50051'
       negotiation-type: plaintext

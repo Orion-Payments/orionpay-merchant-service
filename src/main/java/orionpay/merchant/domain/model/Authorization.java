@@ -21,6 +21,7 @@ public final class Authorization {
         int currencyCode;
         String pinBlock;
         String panMasked;
+        String pan;
         String cardHolderName;
     }
 

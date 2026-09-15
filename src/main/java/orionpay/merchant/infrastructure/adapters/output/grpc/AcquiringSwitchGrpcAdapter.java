@@ -31,7 +31,7 @@ public class AcquiringSwitchGrpcAdapter implements AcquiringSwitchPort {
             log.info("Sending gRPC AuthorizeRequest to switch: {}", JsonFormat.printer().omittingInsignificantWhitespace().print(grpcRequest));
 
             AuthorizeResponse grpcResponse = blockingStub
-                    .withDeadlineAfter(5, TimeUnit.SECONDS)
+                    .withDeadlineAfter(20, TimeUnit.SECONDS)
                     .authorizeTransaction(grpcRequest);
 
             return Optional.of(toDomainResult(grpcResponse));
@@ -77,14 +77,20 @@ public class AcquiringSwitchGrpcAdapter implements AcquiringSwitchPort {
             builder.setPanMasked("");
         }
 
+        if (r.getPan() != null) {
+            builder.setPan(r.getPan());
+        } else {
+            builder.setPan("");
+        }
+
         if (r.getPinBlock() != null) {
             builder.setPinBlockTerminal(r.getPinBlock());
         } else {
             builder.setPinBlockTerminal("");
         }
 
-        // Alterado para usar BigDecimal e toPlainString()
-        builder.setAmount(r.getAmount().toPlainString());
+        // Alterado para usar BigDecimal garantindo a escala de centavos (2 casas decimais)
+        builder.setAmount(r.getAmount().setScale(2, java.math.RoundingMode.HALF_UP).toPlainString());
         builder.setCurrencyCode(r.getCurrencyCode());
 
         return builder.build();

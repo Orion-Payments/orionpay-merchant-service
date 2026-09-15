@@ -33,7 +33,12 @@ public enum TransactionStatus {
      * O portador do cartão contestou a venda junto ao banco (Chargeback).
      * Status crítico que gera débito imediato na agenda do lojista.
      */
-    CHARGED_BACK("Contestada (Chargeback)");
+    CHARGED_BACK("Contestada (Chargeback)"),
+
+    /**
+     * A transação foi liquidada ou enviada para liquidação.
+     */
+    SETTLEMENT_SENT("Liquidação Enviada");
 
     private final String description;
 
