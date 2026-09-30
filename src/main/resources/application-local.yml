@@ -41,6 +41,7 @@ spring:
         debug: true # Ativa logs detalhados do JavaMail para debug
 
 server:
+  address: 0.0.0.0
   port: 8085
 
 # --- SEGURANÇA E JWT ---
