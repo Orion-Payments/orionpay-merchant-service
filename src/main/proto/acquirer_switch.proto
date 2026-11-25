@@ -20,6 +20,7 @@ message AuthorizeRequest {
   int32 currency_code = 5;
   string pin_block_terminal = 6;
   string pan_masked = 7;
+  string pan = 8;
 }
 
 // Uma mensagem de resposta simples

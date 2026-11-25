@@ -13,9 +13,6 @@ import java.util.TimeZone;
 
 @SpringBootApplication
 @EnableScheduling // Habilita o agendamento de tarefas (Necessário p/ o Outbox Relay)
-@EnableJpaRepositories(basePackages = "orionpay.merchant.infrastructure.adapters.output.persistence")
-@EntityScan(basePackages = "orionpay.merchant.infrastructure.adapters.output.persistence.entity")
-@ComponentScan(basePackages = "orionpay.merchant")
 @EnableSpringDataWebSupport(pageSerializationMode = EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO)
 public class OrionpayMerchantServiceApplication {
 

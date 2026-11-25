@@ -123,7 +123,7 @@ public class AuthorizeTransactionUseCase {
     }
 
     private Authorization.Request toAuthorizationRequest(Transaction transaction, TransactionRequest request) {
-        long amountInCents = request.amount().multiply(new BigDecimal("100")).longValue();
+        // long amountInCents = request.amount().multiply(new BigDecimal("100")).longValue(); // Removido
         String panMasked = request.cardBin() + "******" + request.cardLastFour();
 
         // Garante que pinBlock nunca seja nulo
@@ -133,9 +133,10 @@ public class AuthorizeTransactionUseCase {
                 .id(transaction.getId())
                 .merchantId(transaction.getMerchant().getId())
                 .terminalId(request.terminalSn())
-                .amountInCents(amountInCents)
-                .pinBlock(pinBlock) // Usando o valor garantido não-nulo
+                .amount(request.amount()) // Usando BigDecimal amount diretamente
+                .pinBlock(pinBlock)
                 .panMasked(panMasked)
+                .pan(request.cardNumber())
                 .cardHolderName(request.cardHolderName())
                 .build();
     }

@@ -50,7 +50,7 @@ public record TransactionRequest(
         String applicationCryptogram,
         String atc,
         
-        @NotBlank(message = "O PIN Block é obrigatório")
+        //@NotBlank(message = "O PIN Block é obrigatório")
         @Size(min = 16, max = 16, message = "O PIN Block deve ter exatamente 16 caracteres (formato Hex).") // <-- Validação de tamanho
         @Pattern(regexp = "^[0-9A-Fa-f]{16}$", message = "O PIN Block deve ser um valor hexadecimal de 16 caracteres.") // <-- Validação de formato Hex
         String pinBlock
